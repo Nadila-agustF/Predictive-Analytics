@@ -102,20 +102,21 @@ df.shape
 sns.boxplot(x=df['Volume'])
 ```
 ### Eksploratory Data Analysis (EDA)
-- **Memeriksa korelasi antar fitur menggunakan heatmap**.
+
+### **Memeriksa korelasi antar fitur menggunakan heatmap**.
 ![Heatmap](img/heatmap.png)
 
 - Korelasi antara Adj Close, Close, Open, High, Low sangat tinggi (0.90 – 1.00). Hal ini menunjukan bahwa harga-harga saham ini berjalan sangat selaras, karena: Harga buka, tutup, tertinggi, dan terendah harian biasanya berbeda tipis. Close dan Adj Close hampir identik, perbedaannya terletak pada penyesuaian dividen/split
 - Korelasi volume dengan semua kolom sangat rendah dan negatif (-0.08 s/d -0.13) Hal ini menunjukan bahwa Volume tidak punya hubungan linier kuat dengan harga.
 
-- **Melakukan visualisasi tren harga saham dari waktu ke waktu**.
+### **Melakukan visualisasi tren harga saham dari waktu ke waktu**.
 ![Trend](img/trend.png)
 
 - Perbedaan antara garis biru (harga tertinggi) dan garis hijau (harga terendah) mencerminkan volatilitas harian, yaitu tingkat fluktuasi harga dalam satu hari. Semakin besar jaraknya, semakin tinggi tingkat volatilitas harian saham.
 - Harga saham menunjukkan tren kenaikan yang konsisten dari pertengahan 2021 hingga mencapai puncaknya pada pertengahan 2022.
 - Harga tertinggi dan harga terendah cenderung bergerak seiring, yang menunjukkan tidak terdapat anomali ekstrem atau pergerakan harga yang tidak wajar selama periode tersebut.
  
-- Melihat distribusi volume dalam 30 hari terakhir
+### Melihat distribusi volume dalam 30 hari terakhir
 ![Volume](img/volume.png)
 
 ## Data Preparation
