@@ -3,7 +3,7 @@
 ## Domain Proyek
 
 ### Latar Belakang
-![Alt](https://images.app.goo.gl/VViUJxzSHDNuZsWb9)
+![Alt]('https://images.app.goo.gl/VViUJxzSHDNuZsWb9')
 
 Investasi saham menjadi salah satu pilihan populer untuk memperoleh keuntungan jangka panjang. Saham merupakan surat berharga yang mencerminkan kepemilikan atas suatu perusahaan [4]. Meskipun berpotensi menghasilkan keuntungan, fluktuasi harga saham membuat investasi ini mengandung risiko [2].
 PT Telkom Indonesia (Persero) Tbk (TLKM) adalah salah satu emiten unggulan yang termasuk kategori blue chip karena fundamentalnya kuat dan kapitalisasi pasarnya besar [1]. Perusahaan ini merupakan BUMN di bidang layanan TIK, dengan mayoritas saham (52.09%) dimiliki oleh pemerintah [3].
@@ -81,7 +81,7 @@ Menangani missing values dan duplicated data
 ```
 - Menangani missing value dan duplicated
 Setelah diperiksa, data bersih dari missing value ataupun duplkasi data. 
-![alt text](img/image.png)
+![alt text]('img/image.png')
 - Menangani outlier
 Terdapat outlier pada kolom Volume. Sehingga menggunakan metode IQR untuk mengatasinya.
 ```sh
@@ -111,7 +111,7 @@ sns.boxplot(x=df['Volume'])
 > Harga tertinggi dan harga terendah cenderung bergerak seiring, yang menunjukkan tidak terdapat anomali ekstrem atau pergerakan harga yang tidak wajar selama periode tersebut.
 > 
 - Melihat distribusi volume dalam 30 hari terakhir
-![Volume]('img/volume.png)
+![Volume]('img/volume.png')
 
 ## Data Preparation
 1. **Normalisasi Data:**
@@ -140,7 +140,7 @@ Model LSTM memiliki struktur memori internal yang memungkinkan jaringan untuk me
 - Batch Size: 32 — jumlah sampel yang diproses sebelum model diperbarui.
   
 **Visualisasi Hasil Training dan Validasi**
-![alt text](img/image-1.png)
+![alt text]('img/image-1.png')
 - Model berhasil belajar dengan baik dan mampu melakukan generalisasi dengan baik terhadap data baru.
 - Tidak ada indikasi kuat terjadinya overfitting. hal tersebut terlihat dari gap antara training loss dan validation loss yang tidak terlalu besar.
 - Baik nilai loss maupun MAE menunjukkan konvergensi yang stabil, menandakan bahwa jumlah epoch (100) dan parameter pelatihan lainnya sudah cukup baik.
@@ -162,7 +162,7 @@ Dengan **R² = 0.9685**, model LSTM terbukti mampu memodelkan pola historis harg
 
 Berdasarkan proyek prediksi harga saham PT Telkom Indonesia (TLKM) menggunakan model Long Short-Term Memory (LSTM), diperoleh beberapa kesimpulan penting:
 1. **Analisis Pergerakan Harga Saham TLKM (2019–2024)**
-![Alt](img/trend.png)
+![Alt]('img/trend.png')
 
 Dari hasil visualisasi data historis, terlihat bahwa harga saham TLKM mengalami fluktuasi yang signifikan selama periode 2019 hingga 2024. Terdapat tren penurunan pada awal periode pandemi, disusul dengan tren kenaikan harga yang cukup stabil hingga pertengahan 2022. Tren ini menunjukkan bahwa pergerakan harga saham sangat dipengaruhi oleh kondisi makroekonomi dan sentimen pasar.
 
@@ -170,7 +170,7 @@ Dari hasil visualisasi data historis, terlihat bahwa harga saham TLKM mengalami 
 Analisis korelasi antara volume perdagangan dengan harga saham (Open, High, Low, Close) menunjukkan nilai korelasi yang kecil dan negatif. Hal ini mengindikasikan bahwa volume perdagangan tidak memiliki hubungan yang kuat terhadap pergerakan harga saham TLKM. Dengan kata lain, tingginya volume transaksi tidak serta merta memengaruhi naik-turunnya harga saham, sehingga investor perlu mempertimbangkan faktor lain dalam pengambilan keputusan investasi.
 
 3. **Prediksi Harga Saham Menggunakan LSTM**
-![Alt](img/predict%20-%20actual.png)
+![Alt]('img/predict%20-%20actual.png')
 
 Model LSTM berhasil mempelajari pola historis harga saham TLKM dan menunjukkan performa prediksi yang sangat baik. Hal ini terlihat dari grafik perbandingan antara harga aktual dan hasil prediksi, di mana garis prediksi mengikuti dengan akurat tren harga aktual. Hasil ini memperkuat keandalan LSTM dalam menangani data time series dan memberikan nilai prediktif yang tinggi, sehingga dapat menjadi alat bantu yang efektif bagi investor dalam mengambil keputusan transaksi.
 
