@@ -83,6 +83,7 @@ Menangani missing values dan duplicated data
 - Menangani missing value dan duplicated
 Setelah diperiksa, data bersih dari missing value ataupun duplkasi data. 
 ![Missing value](img/image.png)
+
 - Menangani outlier
 Terdapat outlier pada kolom Volume. Sehingga menggunakan metode IQR untuk mengatasinya.
 ```sh
@@ -101,25 +102,30 @@ df.shape
 sns.boxplot(x=df['Volume'])
 ```
 ### Eksploratory Data Analysis (EDA)
-- Memeriksa korelasi antar fitur menggunakan heatmap.
+- **Memeriksa korelasi antar fitur menggunakan heatmap**.
 ![Heatmap](img/heatmap.png)
-> Korelasi antara Adj Close, Close, Open, High, Low sangat tinggi (0.90 – 1.00). Hal ini menunjukan bahwa harga-harga saham ini berjalan sangat selaras, karena: Harga buka, tutup, tertinggi, dan terendah harian biasanya berbeda tipis. Close dan Adj Close hampir identik, perbedaannya terletak pada penyesuaian dividen/split
-> Korelasi volume dengan semua kolom sangat rendah dan negatif (-0.08 s/d -0.13) Hal ini menunjukan bahwa Volume tidak punya hubungan linier kuat dengan harga.
-- Melakukan visualisasi tren harga saham dari waktu ke waktu.
+
+- Korelasi antara Adj Close, Close, Open, High, Low sangat tinggi (0.90 – 1.00). Hal ini menunjukan bahwa harga-harga saham ini berjalan sangat selaras, karena: Harga buka, tutup, tertinggi, dan terendah harian biasanya berbeda tipis. Close dan Adj Close hampir identik, perbedaannya terletak pada penyesuaian dividen/split
+- Korelasi volume dengan semua kolom sangat rendah dan negatif (-0.08 s/d -0.13) Hal ini menunjukan bahwa Volume tidak punya hubungan linier kuat dengan harga.
+
+- **Melakukan visualisasi tren harga saham dari waktu ke waktu**.
 ![Trend](img/trend.png)
-> Perbedaan antara garis biru (harga tertinggi) dan garis hijau (harga terendah) mencerminkan volatilitas harian, yaitu tingkat fluktuasi harga dalam satu hari. Semakin besar jaraknya, semakin tinggi tingkat volatilitas harian saham.
-> Harga saham menunjukkan tren kenaikan yang konsisten dari pertengahan 2021 hingga mencapai puncaknya pada pertengahan 2022.
-> Harga tertinggi dan harga terendah cenderung bergerak seiring, yang menunjukkan tidak terdapat anomali ekstrem atau pergerakan harga yang tidak wajar selama periode tersebut.
-> 
+
+- Perbedaan antara garis biru (harga tertinggi) dan garis hijau (harga terendah) mencerminkan volatilitas harian, yaitu tingkat fluktuasi harga dalam satu hari. Semakin besar jaraknya, semakin tinggi tingkat volatilitas harian saham.
+- Harga saham menunjukkan tren kenaikan yang konsisten dari pertengahan 2021 hingga mencapai puncaknya pada pertengahan 2022.
+- Harga tertinggi dan harga terendah cenderung bergerak seiring, yang menunjukkan tidak terdapat anomali ekstrem atau pergerakan harga yang tidak wajar selama periode tersebut.
+ 
 - Melihat distribusi volume dalam 30 hari terakhir
 ![Volume](img/volume.png)
 
 ## Data Preparation
 1. **Normalisasi Data:**
 Menggunakan MinMaxScaler untuk menstandarkan nilai pada kolom Close, agar model LSTM dapat belajar secara stabil tanpa terpengaruh perbedaan skala antar fitur.
-2. **Spliting data:**
+
+3. **Spliting data:**
 Membagi data menjadi 80% untuk data latih dan 20% pada data uji berdasarkan urutan waktu (tanpa pengacakan), untuk mempertahankan sifat time series.
-3. **Pembuatan Data Time Series:**
+
+5. **Pembuatan Data Time Series:**
 Untuk mempersiapkan data yang sesuai dengan kebutuhan model LSTM, dilakukan proses transformasi dataset menjadi bentuk urutan (sequence) berdasarkan jendela waktu (time window). Model LSTM membutuhkan input dengan struktur tiga dimensi: (jumlah sampel, panjang urutan waktu, jumlah fitur), sehingga data perlu direstrukturisasi terlebih dahulu.
 
 ## Modeling
@@ -142,6 +148,7 @@ Model LSTM memiliki struktur memori internal yang memungkinkan jaringan untuk me
   
 **Visualisasi Hasil Training dan Validasi**
 ![alt text](img/image-1.png)
+
 - Model berhasil belajar dengan baik dan mampu melakukan generalisasi dengan baik terhadap data baru.
 - Tidak ada indikasi kuat terjadinya overfitting. hal tersebut terlihat dari gap antara training loss dan validation loss yang tidak terlalu besar.
 - Baik nilai loss maupun MAE menunjukkan konvergensi yang stabil, menandakan bahwa jumlah epoch (100) dan parameter pelatihan lainnya sudah cukup baik.
@@ -177,8 +184,13 @@ Model LSTM berhasil mempelajari pola historis harga saham TLKM dan menunjukkan p
 
 ## Referensi
 [1] Hendra T et al., "Prediksi Harga Saham Telkom Menggunakan Prophet: AnalisisPengaruh Sentimen Publik Terhadap Kehadiran Starlink," Malcom Jurnal, 2025. [Link](https://journal.irpi.or.id/index.php/malcom/article/view/1796/927)
-[2] Meydina Rhma, "Implementasi Algoritma Long Short Term Memory(LSTM) untuk Prediksi Penutupan Harga Saham PT Telkom Indonesia," Medium.com, 2021. [Link](https://meydina-rhma.medium.com implementasi-algoritma-long-short-term-memory-lstm-untuk-prediksi-penutupan-harga-saham-pt-telkom-1d3997ddb81c)
+
+[2] Meydina Rhma, "Implementasi Algoritma Long Short Term Memory(LSTM) untuk Prediksi Penutupan Harga Saham PT Telkom Indonesia," Medium.com, 2021. [Link](https://meydina-rhma.medium.com/implementasi-algoritma-long-short-term-memory-lstm-untuk-prediksi-penutupan-harga-saham-pt-telkom-1d3997ddb81c)
+
 [3] Telkom Indonesia., "Sekilas tentang Telkom Indonesia"., telkom.co.id, [Link]((https://www.telkom.co.id/sites/profil-telkom/id_ID/page/profil-dan-riwayat-singkat-22))
+
 [4] W.R. Ulul Fadilah, “Analisis Prediksi Harga Saham PT. Telekomunikasi Indonesia Menggunakan Metode Support Vector Machine,” ResearchGate, 2020. [Link](https://www.researchgate.net/publication/347653454_Analisis_Prediksi_Harga_Saham_PT_Telekomunikasi_Indonesia_Menggunakan_Metode_Support_Vector_Machine)
+
 [5] Isna Alima, “Prediksi Harga Saham PT.Telekomunikasi Indonesia Menggunakan Metode Transformasi Wavelet Diskrit Daubechies,” Jurnal Statkom, 2023. [Link](https://journal.unugiri.ac.id/index.php/statkom/article/view/2981/1441)
+
 [6] H. Nazhiroh et al., "PT.Telkom (Tbk) Stock Price Forecasting Using Long Short Term Memory (LSTM)., UNP jurnal, 2022 [Link](https://ujsds.ppj.unp.ac.id/index.php/ujsds/article/download/223/144/2987)  
