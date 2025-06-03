@@ -187,15 +187,15 @@ Analisis korelasi antara volume perdagangan dengan harga saham (Open, High, Low,
 Model LSTM berhasil mempelajari pola historis harga saham TLKM dan menunjukkan performa prediksi yang sangat baik. Hal ini terlihat dari grafik perbandingan antara harga aktual dan hasil prediksi, di mana garis prediksi mengikuti dengan akurat tren harga aktual. Hasil ini memperkuat keandalan LSTM dalam menangani data time series dan memberikan nilai prediktif yang tinggi, sehingga dapat menjadi alat bantu yang efektif bagi investor dalam mengambil keputusan transaksi.
 
 ## Referensi
-[1] Hendra T et al., "Prediksi Harga Saham Telkom Menggunakan Prophet: AnalisisPengaruh Sentimen Publik Terhadap Kehadiran Starlink," Malcom Jurnal, 2025. [Link](https://journal.irpi.or.id/index.php/malcom/article/view/1796/927)
+[^1] Hendra T et al., "Prediksi Harga Saham Telkom Menggunakan Prophet: AnalisisPengaruh Sentimen Publik Terhadap Kehadiran Starlink," Malcom Jurnal, 2025. [Link](https://journal.irpi.or.id/index.php/malcom/article/view/1796/927)
 
-[2] Meydina Rhma, "Implementasi Algoritma Long Short Term Memory(LSTM) untuk Prediksi Penutupan Harga Saham PT Telkom Indonesia," Medium.com, 2021. [Link](https://meydina-rhma.medium.com/implementasi-algoritma-long-short-term-memory-lstm-untuk-prediksi-penutupan-harga-saham-pt-telkom-1d3997ddb81c)
+[^2] Meydina Rhma, "Implementasi Algoritma Long Short Term Memory(LSTM) untuk Prediksi Penutupan Harga Saham PT Telkom Indonesia," Medium.com, 2021. [Link](https://meydina-rhma.medium.com/implementasi-algoritma-long-short-term-memory-lstm-untuk-prediksi-penutupan-harga-saham-pt-telkom-1d3997ddb81c)
 
-[3] Telkom Indonesia., "Sekilas tentang Telkom Indonesia"., telkom.co.id, [Link]((https://www.telkom.co.id/sites/profil-telkom/id_ID/page/profil-dan-riwayat-singkat-22))
+[^3] Telkom Indonesia., "Sekilas tentang Telkom Indonesia"., telkom.co.id, [Link]((https://www.telkom.co.id/sites/profil-telkom/id_ID/page/profil-dan-riwayat-singkat-22))
 
-[4] W.R. Ulul Fadilah, “Analisis Prediksi Harga Saham PT. Telekomunikasi Indonesia Menggunakan Metode Support Vector Machine,” ResearchGate, 2020. [Link](https://www.researchgate.net/publication/347653454_Analisis_Prediksi_Harga_Saham_PT_Telekomunikasi_Indonesia_Menggunakan_Metode_Support_Vector_Machine)
+[^4] W.R. Ulul Fadilah, “Analisis Prediksi Harga Saham PT. Telekomunikasi Indonesia Menggunakan Metode Support Vector Machine,” ResearchGate, 2020. [Link](https://www.researchgate.net/publication/347653454_Analisis_Prediksi_Harga_Saham_PT_Telekomunikasi_Indonesia_Menggunakan_Metode_Support_Vector_Machine)
 
-[5] Isna Alima, “Prediksi Harga Saham PT.Telekomunikasi Indonesia Menggunakan Metode Transformasi Wavelet Diskrit Daubechies,” Jurnal Statkom, 2023. [Link](https://journal.unugiri.ac.id/index.php/statkom/article/view/2981/1441)
+[^5] Isna Alima, “Prediksi Harga Saham PT.Telekomunikasi Indonesia Menggunakan Metode Transformasi Wavelet Diskrit Daubechies,” Jurnal Statkom, 2023. [Link](https://journal.unugiri.ac.id/index.php/statkom/article/view/2981/1441)
 
-[6] H. Nazhiroh et al., "PT.Telkom (Tbk) Stock Price Forecasting Using Long Short Term Memory (LSTM)., UNP jurnal, 2022 [Link](https://ujsds.ppj.unp.ac.id/index.php/ujsds/article/download/223/144/2987)  
+[^6] H. Nazhiroh et al., "PT.Telkom (Tbk) Stock Price Forecasting Using Long Short Term Memory (LSTM)., UNP jurnal, 2022 [Link](https://ujsds.ppj.unp.ac.id/index.php/ujsds/article/download/223/144/2987)  
 
