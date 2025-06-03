@@ -6,9 +6,9 @@
 
 ![Saham](img/saham.png)
 
-Investasi saham menjadi salah satu pilihan populer untuk memperoleh keuntungan jangka panjang. Saham merupakan surat berharga yang mencerminkan kepemilikan atas suatu perusahaan [^4]. Meskipun berpotensi menghasilkan keuntungan, fluktuasi harga saham membuat investasi ini mengandung risiko [^2].
-PT Telkom Indonesia (Persero) Tbk (TLKM) adalah salah satu emiten unggulan yang termasuk kategori blue chip karena fundamentalnya kuat dan kapitalisasi pasarnya besar [^1]. Perusahaan ini merupakan BUMN di bidang layanan TIK, dengan mayoritas saham (52.09%) dimiliki oleh pemerintah [^3].
-Namun, data historis menunjukkan bahwa harga saham TLKM tidak stabil. Menurut riset H. Nazhiroh (2022), harga saham TLKM sempat turun drastis hingga Rp2.256 per lembar pada 2020, lalu naik signifikan hingga Rp4.770 pada Agustus 2022 [^6]. Hal ini diperkuat oleh riset Isna Alima (2024) yang menunjukkan tren naik sejak September 2020 hingga Februari 2023, namun dengan volatilitas tinggi; nilai tertinggi Rp4.680 dan terendah Rp2.620 [^5]. Kedua riset tersebut menunjukkan bahwa data saham TLKM bersifat tidak stasioner, baik dari sisi rata-rata maupun variansnya.
+Investasi saham menjadi salah satu pilihan populer untuk memperoleh keuntungan jangka panjang. Saham merupakan surat berharga yang mencerminkan kepemilikan atas suatu perusahaan[^4]. Meskipun berpotensi menghasilkan keuntungan, fluktuasi harga saham membuat investasi ini mengandung risiko[^2].
+PT Telkom Indonesia (Persero) Tbk (TLKM) adalah salah satu emiten unggulan yang termasuk kategori blue chip karena fundamentalnya kuat dan kapitalisasi pasarnya besar[^1]. Perusahaan ini merupakan BUMN di bidang layanan TIK, dengan mayoritas saham (52.09%) dimiliki oleh pemerintah[^3].
+Namun, data historis menunjukkan bahwa harga saham TLKM tidak stabil. Menurut riset H. Nazhiroh (2022), harga saham TLKM sempat turun drastis hingga Rp2.256 per lembar pada 2020, lalu naik signifikan hingga Rp4.770 pada Agustus 2022[^6]. Hal ini diperkuat oleh riset Isna Alima (2024) yang menunjukkan tren naik sejak September 2020 hingga Februari 2023, namun dengan volatilitas tinggi; nilai tertinggi Rp4.680 dan terendah Rp2.620[^5]. Kedua riset tersebut menunjukkan bahwa data saham TLKM bersifat tidak stasioner, baik dari sisi rata-rata maupun variansnya.
 Kondisi ini menuntut penggunaan metode prediksi yang mampu menangani pola data non-linier dan fluktuatif. Salah satu metode yang terbukti efektif adalah Long Short-Term Memory (LSTM), yang dirancang untuk mengenali pola jangka panjang dalam data time series. Model ini diharapkan dapat membantu investor dalam mengambil keputusan transaksi saham secara lebih akurat dan berbasis data.
 
 ## Business Understanding
@@ -187,15 +187,15 @@ Analisis korelasi antara volume perdagangan dengan harga saham (Open, High, Low,
 Model LSTM berhasil mempelajari pola historis harga saham TLKM dan menunjukkan performa prediksi yang sangat baik. Hal ini terlihat dari grafik perbandingan antara harga aktual dan hasil prediksi, di mana garis prediksi mengikuti dengan akurat tren harga aktual. Hasil ini memperkuat keandalan LSTM dalam menangani data time series dan memberikan nilai prediktif yang tinggi, sehingga dapat menjadi alat bantu yang efektif bagi investor dalam mengambil keputusan transaksi.
 
 ## Referensi
-[^1] Hendra T et al., "Prediksi Harga Saham Telkom Menggunakan Prophet: AnalisisPengaruh Sentimen Publik Terhadap Kehadiran Starlink," Malcom Jurnal, 2025. [Link](https://journal.irpi.or.id/index.php/malcom/article/view/1796/927)
+[^1]: Hendra T et al., "Prediksi Harga Saham Telkom Menggunakan Prophet: AnalisisPengaruh Sentimen Publik Terhadap Kehadiran Starlink," Malcom Jurnal, 2025. [Link](https://journal.irpi.or.id/index.php/malcom/article/view/1796/927)
 
-[^2] Meydina Rhma, "Implementasi Algoritma Long Short Term Memory(LSTM) untuk Prediksi Penutupan Harga Saham PT Telkom Indonesia," Medium.com, 2021. [Link](https://meydina-rhma.medium.com/implementasi-algoritma-long-short-term-memory-lstm-untuk-prediksi-penutupan-harga-saham-pt-telkom-1d3997ddb81c)
+[^2]: Meydina Rhma, "Implementasi Algoritma Long Short Term Memory(LSTM) untuk Prediksi Penutupan Harga Saham PT Telkom Indonesia," Medium.com, 2021. [Link](https://meydina-rhma.medium.com/implementasi-algoritma-long-short-term-memory-lstm-untuk-prediksi-penutupan-harga-saham-pt-telkom-1d3997ddb81c)
 
-[^3] Telkom Indonesia., "Sekilas tentang Telkom Indonesia"., telkom.co.id, [Link]((https://www.telkom.co.id/sites/profil-telkom/id_ID/page/profil-dan-riwayat-singkat-22))
+[^3]: Telkom Indonesia., "Sekilas tentang Telkom Indonesia"., telkom.co.id, [Link]((https://www.telkom.co.id/sites/profil-telkom/id_ID/page/profil-dan-riwayat-singkat-22))
 
-[^4] W.R. Ulul Fadilah, “Analisis Prediksi Harga Saham PT. Telekomunikasi Indonesia Menggunakan Metode Support Vector Machine,” ResearchGate, 2020. [Link](https://www.researchgate.net/publication/347653454_Analisis_Prediksi_Harga_Saham_PT_Telekomunikasi_Indonesia_Menggunakan_Metode_Support_Vector_Machine)
+[^4]: W.R. Ulul Fadilah, “Analisis Prediksi Harga Saham PT. Telekomunikasi Indonesia Menggunakan Metode Support Vector Machine,” ResearchGate, 2020. [Link](https://www.researchgate.net/publication/347653454_Analisis_Prediksi_Harga_Saham_PT_Telekomunikasi_Indonesia_Menggunakan_Metode_Support_Vector_Machine)
 
-[^5] Isna Alima, “Prediksi Harga Saham PT.Telekomunikasi Indonesia Menggunakan Metode Transformasi Wavelet Diskrit Daubechies,” Jurnal Statkom, 2023. [Link](https://journal.unugiri.ac.id/index.php/statkom/article/view/2981/1441)
+[^5]: Isna Alima, “Prediksi Harga Saham PT.Telekomunikasi Indonesia Menggunakan Metode Transformasi Wavelet Diskrit Daubechies,” Jurnal Statkom, 2023. [Link](https://journal.unugiri.ac.id/index.php/statkom/article/view/2981/1441)
 
-[^6] H. Nazhiroh et al., "PT.Telkom (Tbk) Stock Price Forecasting Using Long Short Term Memory (LSTM)., UNP jurnal, 2022 [Link](https://ujsds.ppj.unp.ac.id/index.php/ujsds/article/download/223/144/2987)  
+[^6]: H. Nazhiroh et al., "PT.Telkom (Tbk) Stock Price Forecasting Using Long Short Term Memory (LSTM)., UNP jurnal, 2022 [Link](https://ujsds.ppj.unp.ac.id/index.php/ujsds/article/download/223/144/2987)  
 
