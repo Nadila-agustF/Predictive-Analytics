@@ -6,9 +6,9 @@
 
 ![Saham](img/saham.png)
 
-Investasi saham menjadi salah satu pilihan populer untuk memperoleh keuntungan jangka panjang. Saham merupakan surat berharga yang mencerminkan kepemilikan atas suatu perusahaan [4]. Meskipun berpotensi menghasilkan keuntungan, fluktuasi harga saham membuat investasi ini mengandung risiko [2].
-PT Telkom Indonesia (Persero) Tbk (TLKM) adalah salah satu emiten unggulan yang termasuk kategori blue chip karena fundamentalnya kuat dan kapitalisasi pasarnya besar [1]. Perusahaan ini merupakan BUMN di bidang layanan TIK, dengan mayoritas saham (52.09%) dimiliki oleh pemerintah [3].
-Namun, data historis menunjukkan bahwa harga saham TLKM tidak stabil. Menurut riset H. Nazhiroh (2022), harga saham TLKM sempat turun drastis hingga Rp2.256 per lembar pada 2020, lalu naik signifikan hingga Rp4.770 pada Agustus 2022 [6]. Hal ini diperkuat oleh riset Isna Alima (2024) yang menunjukkan tren naik sejak September 2020 hingga Februari 2023, namun dengan volatilitas tinggi; nilai tertinggi Rp4.680 dan terendah Rp2.620 [5]. Kedua riset tersebut menunjukkan bahwa data saham TLKM bersifat tidak stasioner, baik dari sisi rata-rata maupun variansnya.
+Investasi saham menjadi salah satu pilihan populer untuk memperoleh keuntungan jangka panjang. Saham merupakan surat berharga yang mencerminkan kepemilikan atas suatu perusahaan [^4]. Meskipun berpotensi menghasilkan keuntungan, fluktuasi harga saham membuat investasi ini mengandung risiko [^2].
+PT Telkom Indonesia (Persero) Tbk (TLKM) adalah salah satu emiten unggulan yang termasuk kategori blue chip karena fundamentalnya kuat dan kapitalisasi pasarnya besar [^1]. Perusahaan ini merupakan BUMN di bidang layanan TIK, dengan mayoritas saham (52.09%) dimiliki oleh pemerintah [^3].
+Namun, data historis menunjukkan bahwa harga saham TLKM tidak stabil. Menurut riset H. Nazhiroh (2022), harga saham TLKM sempat turun drastis hingga Rp2.256 per lembar pada 2020, lalu naik signifikan hingga Rp4.770 pada Agustus 2022 [^6]. Hal ini diperkuat oleh riset Isna Alima (2024) yang menunjukkan tren naik sejak September 2020 hingga Februari 2023, namun dengan volatilitas tinggi; nilai tertinggi Rp4.680 dan terendah Rp2.620 [^5]. Kedua riset tersebut menunjukkan bahwa data saham TLKM bersifat tidak stasioner, baik dari sisi rata-rata maupun variansnya.
 Kondisi ini menuntut penggunaan metode prediksi yang mampu menangani pola data non-linier dan fluktuatif. Salah satu metode yang terbukti efektif adalah Long Short-Term Memory (LSTM), yang dirancang untuk mengenali pola jangka panjang dalam data time series. Model ini diharapkan dapat membantu investor dalam mengambil keputusan transaksi saham secara lebih akurat dan berbasis data.
 
 ## Business Understanding
@@ -69,6 +69,26 @@ memory usage: 66.4+ KB
 - Adj Close : Harga penutupan yang telah disesuaikan.
 - Volume    : Jumlah saham yang diperdagangkan.
 
+### Eksploratory Data Analysis (EDA)
+
+### **Memeriksa korelasi antar fitur menggunakan heatmap**.
+![Heatmap](img/heatmap.png)
+
+- Korelasi antara Adj Close, Close, Open, High, Low sangat tinggi (0.90 – 1.00). Hal ini menunjukan bahwa harga-harga saham ini berjalan sangat selaras, karena: Harga buka, tutup, tertinggi, dan terendah harian biasanya berbeda tipis. Close dan Adj Close hampir identik, perbedaannya terletak pada penyesuaian dividen/split
+- Korelasi volume dengan semua kolom sangat rendah dan negatif (-0.08 s/d -0.13) Hal ini menunjukan bahwa Volume tidak punya hubungan linier kuat dengan harga.
+
+### **Melakukan visualisasi tren harga saham dari waktu ke waktu**.
+![Trend](img/trend.png)
+
+- Perbedaan antara garis biru (harga tertinggi) dan garis hijau (harga terendah) mencerminkan volatilitas harian, yaitu tingkat fluktuasi harga dalam satu hari. Semakin besar jaraknya, semakin tinggi tingkat volatilitas harian saham.
+- Harga saham menunjukkan tren kenaikan yang konsisten dari pertengahan 2021 hingga mencapai puncaknya pada pertengahan 2022.
+- Harga tertinggi dan harga terendah cenderung bergerak seiring, yang menunjukkan tidak terdapat anomali ekstrem atau pergerakan harga yang tidak wajar selama periode tersebut.
+ 
+### Melihat distribusi volume dalam 30 hari terakhir
+![Volume](img/volume.png)
+
+## Data Preparation
+
 ### Cleaning Data
 - Mengubah tipe data kolom Date dan Volume, menjadikan Date sebagai index
 ```sh
@@ -101,25 +121,7 @@ df.shape
 # Memeriksa ulang outlier
 sns.boxplot(x=df['Volume'])
 ```
-### Eksploratory Data Analysis (EDA)
 
-### **Memeriksa korelasi antar fitur menggunakan heatmap**.
-![Heatmap](img/heatmap.png)
-
-- Korelasi antara Adj Close, Close, Open, High, Low sangat tinggi (0.90 – 1.00). Hal ini menunjukan bahwa harga-harga saham ini berjalan sangat selaras, karena: Harga buka, tutup, tertinggi, dan terendah harian biasanya berbeda tipis. Close dan Adj Close hampir identik, perbedaannya terletak pada penyesuaian dividen/split
-- Korelasi volume dengan semua kolom sangat rendah dan negatif (-0.08 s/d -0.13) Hal ini menunjukan bahwa Volume tidak punya hubungan linier kuat dengan harga.
-
-### **Melakukan visualisasi tren harga saham dari waktu ke waktu**.
-![Trend](img/trend.png)
-
-- Perbedaan antara garis biru (harga tertinggi) dan garis hijau (harga terendah) mencerminkan volatilitas harian, yaitu tingkat fluktuasi harga dalam satu hari. Semakin besar jaraknya, semakin tinggi tingkat volatilitas harian saham.
-- Harga saham menunjukkan tren kenaikan yang konsisten dari pertengahan 2021 hingga mencapai puncaknya pada pertengahan 2022.
-- Harga tertinggi dan harga terendah cenderung bergerak seiring, yang menunjukkan tidak terdapat anomali ekstrem atau pergerakan harga yang tidak wajar selama periode tersebut.
- 
-### Melihat distribusi volume dalam 30 hari terakhir
-![Volume](img/volume.png)
-
-## Data Preparation
 1. **Normalisasi Data:**
 Menggunakan MinMaxScaler untuk menstandarkan nilai pada kolom Close, agar model LSTM dapat belajar secara stabil tanpa terpengaruh perbedaan skala antar fitur.
 
