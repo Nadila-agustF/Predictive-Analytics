@@ -128,7 +128,7 @@ Terdapat outlier pada kolom volume.
 ### Eksploratory Data Analysis (EDA)
 
 ### Statistik Deskriptif
-![Logo](img/statistik20%desc.png)
+![Logo](img/statistik.png)
 
 ### **Memeriksa korelasi antar fitur menggunakan heatmap**.
 ![Heatmap](img/heatmap.png)
@@ -201,10 +201,10 @@ sns.boxplot(x=df['Volume'])
 ```
 
 Outlier sebelum diatasi
-![before](img/before20%outlier.png)
+![before](img/before.png)
 
 Outlier setelah diatasi
-![before](img/after20%outlier.png)
+![after](img/after.png)
 
 - **Memisahkan Fitur dan Target sebelum normalisasi data**
 ```sh
@@ -214,7 +214,7 @@ y = df['Adj Close'].values.reshape(-1, 1)
 >
 > Fitur (X): Berisi kolom-kolom prediktor yang akan digunakan oleh model.
 >
->Target (Y): Merupakan kolom "Adj Close" (harga penutupan saham yang telah disesuaikan) yang akan diprediksi.
+> Target (Y): Merupakan kolom "Adj Close" (harga penutupan saham yang telah disesuaikan) yang akan diprediksi.
 Pemisahan ini dilakukan sebelum normalisasi, karena target tidak ikut dinormalisasi dalam proses pelatihan.
 >
 
