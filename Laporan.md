@@ -39,7 +39,17 @@ Untuk mencapai tujuan dalam memprediksi harga saham secara akurat, beberapa solu
 ## Data Understanding
 Data yang digunakan mengambil data Harga Saham PT Telekomunikasi Indonesia (tbk) yang bersumber dari Kaggle
 Link dataset: [Kaggle](https://www.kaggle.com/datasets/irfansaputranst/dataset-saham-tlkm-jk)
-- Menganalisis informasi data
+
+### Fitur-fitur utama
+- Date      : Tanggal pencatatan data dalam format DD/MM/YYYY.
+- Open      : Harga pembukaan saham.
+- High      : Harga tertinggi harian.
+- Low       : Harga terendah harian.
+- Close     : Harga penutupan harian.
+- Adj Close : Harga penutupan yang telah disesuaikan.
+- Volume    : Jumlah saham yang diperdagangkan.
+
+### Menganalisis informasi data
 ```sh
   df.info
  ```
@@ -60,16 +70,56 @@ Data columns (total 7 columns):
 dtypes: float64(5), object(2)
 memory usage: 66.4+ KB
 ```
-### Fitur-fitur utama
-- Date      : Tanggal pencatatan data dalam format DD/MM/YYYY.
-- Open      : Harga pembukaan saham.
-- High      : Harga tertinggi harian.
-- Low       : Harga terendah harian.
-- Close     : Harga penutupan harian.
-- Adj Close : Harga penutupan yang telah disesuaikan.
-- Volume    : Jumlah saham yang diperdagangkan.
+- Kolom Date masih bertype data object, maka perlu dilakukan perubahan type data sehingga menjadi datetime
+- Kolom Volume memerlukan perubahan pada type data, menjadi numerik(float) bukan object.
+
+## Memeriksa missing value dan duplikasi
+- Missing Value
+```sh
+data = df.isnull().sum()
+print("Jumlah missing value pada setiap kolom:")
+print(data)
+```
+Hasilnya
+```sh
+Jumlah missing value pada setiap kolom:
+Adj Close    0
+Close        0
+High         0
+Low          0
+Open         0
+Volume       0
+dtype: int64
+```
+> Semua kolom dalam data bersih, tidak ada missing value
+
+- Duplikasi Data
+```sh
+data = df.duplicated().sum()
+print("Jumlah data duplikat:")
+print(data)
+```
+Hasilnya
+```sh
+Jumlah data duplikat:
+0
+```
+> Begitupun dengan masalah duplikasi data, tidak ada indikasi data yang duplikat
+- Memeriksa outlier pada tiap kolom
+```sh
+           Jumlah Outlier
+Adj Close               0
+Close                   0
+High                    0
+Low                     0
+Open                    0
+Volume                  8
+```
+Terdapat outlier pada kolom volume. 
 
 ### Eksploratory Data Analysis (EDA)
+
+### Statistik Deskriptif
 
 ### **Memeriksa korelasi antar fitur menggunakan heatmap**.
 ![Heatmap](img/heatmap.png)
@@ -88,9 +138,10 @@ memory usage: 66.4+ KB
 ![Volume](img/volume.png)
 
 ## Data Preparation
+Pada bagian ini merupakan untuk menyiapkan data mentah menjadi data yang bersih, terstruktur, dan siap digunakan untuk analisis lanjutan hingga pemodelan machine learning. Proses ini sangat penting karena kualitas data sangat memengaruhi hasil akhir dari model atau analisis.
 
 ### Cleaning Data
-- Mengubah tipe data kolom Date dan Volume, menjadikan Date sebagai index
+- **Mengubah tipe data kolom Date dan Volume, menjadikan Date sebagai index**
 ```sh
 # Mengubah kolom 'Date' ke format datetime (DD/MM/YYYY)
 df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
@@ -100,11 +151,28 @@ df.set_index('Date', inplace=True)
 df['Volume'] = df['Volume'].str.replace('.', '', regex=False).astype(float)
 Menangani missing values dan duplicated data
 ```
-- Menangani missing value dan duplicated
-Setelah diperiksa, data bersih dari missing value ataupun duplkasi data. 
-![Missing value](img/image.png)
+Hasilnya: 
+```sh
+Adj Close    float64
+Close        float64
+High         float64
+Low          float64
+Open         float64
+Volume       float64
+dtype: object
+            Adj Close   Close    High     Low    Open       Volume
+Date                                                              
+2019-11-07    3216.63  4070.0  4150.0  3990.0  4150.0  125291200.0
+2019-11-08    3248.24  4110.0  4120.0  3990.0  4010.0   70404800.0
+2019-11-11    3240.34  4100.0  4120.0  4040.0  4040.0   57079800.0
+2019-11-12    3303.57  4180.0  4190.0  4050.0  4050.0   88251100.0
+2019-11-13    3279.86  4150.0  4170.0  4100.0  4130.0   91925700.0
+```
+> Kolom Date dan Volume sudah diubah mejadi type data yang sesuai.
+> Kolom Date dijadikan sebagai index agar memudahkan analisis
+> Karena data tidak memiliki missing value dan duplikasi, maka tidak perlu dilakukan penangan pada dua masalah tersebut. 
 
-- Menangani outlier
+- **Menangani outlier**
 Terdapat outlier pada kolom Volume. Sehingga menggunakan metode IQR untuk mengatasinya.
 ```sh
 #Menghitung Q1, Q3, dan IQR hanya untuk kolom Volume
@@ -121,33 +189,84 @@ df.shape
 # Memeriksa ulang outlier
 sns.boxplot(x=df['Volume'])
 ```
+Outlier sebelum diatas
+Outlier setelah diatasi
 
-1. **Normalisasi Data:**
+- **Memisahkan Fitur dan Target sebelum normalisasi data**
+```sh
+X = df.drop(columns=['Adj Close'])
+y = df['Adj Close'].values.reshape(-1, 1)
+```
+> Fitur (X): Berisi kolom-kolom prediktor yang akan digunakan oleh model.
+> Target (Y): Merupakan kolom "Adj Close" (harga penutupan saham yang telah disesuaikan) yang akan diprediksi.
+Pemisahan ini dilakukan sebelum normalisasi, karena target tidak ikut dinormalisasi dalam proses pelatihan.
+
+- **Normalisasi Data:**
 Menggunakan MinMaxScaler untuk menstandarkan nilai pada kolom Close, agar model LSTM dapat belajar secara stabil tanpa terpengaruh perbedaan skala antar fitur.
+```sh
+#Standardisasi data
+scaler = MinMaxScaler(feature_range=(0, 1))
+scaled = scaler.fit_transform(X)
+```
 
-3. **Spliting data:**
+- **Spliting data:**
 Membagi data menjadi 80% untuk data latih dan 20% pada data uji berdasarkan urutan waktu (tanpa pengacakan), untuk mempertahankan sifat time series.
+Hasil pembagian data:
+```sh
+Train Size: 918
+Test Size: 230
+```
 
 5. **Pembuatan Data Time Series:**
-Untuk mempersiapkan data yang sesuai dengan kebutuhan model LSTM, dilakukan proses transformasi dataset menjadi bentuk urutan (sequence) berdasarkan jendela waktu (time window). Model LSTM membutuhkan input dengan struktur tiga dimensi: (jumlah sampel, panjang urutan waktu, jumlah fitur), sehingga data perlu direstrukturisasi terlebih dahulu.
+Untuk mempersiapkan data yang sesuai dengan kebutuhan model LSTM, dilakukan proses transformasi dataset menjadi bentuk urutan (sequence) berdasarkan jendela waktu (time window). 
+```sh
+# Fungsi untuk membuat dataset berbasis window time series
+def create_dataset(data, time_step=60):
+    X, y = [], []
+    for i in range(time_step, len(data)):
+        X.append(data[i-time_step:i, 0])  # 60 time steps sebagai feature
+        y.append(data[i, 0])              # Nilai berikutnya sebagai target
+    return np.array(X), np.array(y)
+```
+Model LSTM membutuhkan input dengan struktur tiga dimensi: (jumlah sampel, panjang urutan waktu, jumlah fitur), sehingga data perlu direstrukturisasi terlebih dahulu.
+```sh
+# Reshape input untuk LSTM [samples, time steps, features]
+X_train = X_train.reshape(X_train.shape[0], X_train.shape[1], 1)
+X_test = X_test.reshape(X_test.shape[0], X_test.shape[1], 1)
+```
 
 ## Modeling
 Dalam pengembangan model untuk memprediksi harga saham PT Telekomunikasi Indonesia, digunakan pendekatan deep learning dengan algoritma Long Short-Term Memory (LSTM). LSTM dipilih karena memiliki kemampuan dalam mengingat informasi jangka panjang dan menangani ketergantungan waktu (temporal dependencies) yang umum dijumpai pada data time series, seperti harga saham.
 
 **Algoritma Utama: Long Short-Term Memory (LSTM)**
 Model LSTM memiliki struktur memori internal yang memungkinkan jaringan untuk mempertahankan informasi penting dari urutan data sebelumnya. Hal ini menjadikan LSTM sangat efektif dalam menangkap pola historis dan tren jangka panjang dalam data harga saham.
+```sh
+model = Sequential([
+    LSTM(64, return_sequences=True, input_shape=(X_train.shape[1], 1)),
+    Dropout(0.3),
+    LSTM(64, return_sequences=False),
+    Dropout(0.3),
+    Dense(32, activation='relu'),
+    Dense(16, activation='relu'),
+    Dense(1)
+])
+```
 
 **Arsitektur Model**
-- Model LSTM yang digunakan terdiri dari beberapa komponen utama berikut:
-- Beberapa layer LSTM bertingkat: Untuk menangkap pola temporal secara mendalam dari data historis saham.
-- Layer Dropout: Digunakan untuk mencegah overfitting dengan mengabaikan sejumlah unit secara acak selama pelatihan.
-- Layer Dense (Fully Connected): Sebagai layer output yang menghasilkan prediksi harga saham pada waktu berikutnya.
+Model LSTM yang digunakan terdiri dari beberapa komponen utama berikut:
+- Layer LSTM
+Dua lapisan LSTM menggunakan 64 unit neuron pada masing-masing lapisan. Layer pertama menggunakan return_sequences=True agar output tiap timestep diteruskan ke layer LSTM berikutnya. Layer kedua menggunakan return_sequences=False karena hasilnya akan diteruskan ke layer Dense.
+- Layer Dropout:
+Setiap LSTM diikuti oleh **Dropout(0.3)** untuk mencegah overfitting dengan menghilangkan 30% neuron secara acak saat training.
+- Layer Dense (Fully Connected):
+terdapat tiga layer Dense pada model LSTM, diantaranya **Dense(32)** dan **Dense(16)** dengan aktivasi ReLU, berfungsi menangkap pola non-linear, sedangkan lapisan terakhir **Dense(1)** sebagai output karena model melakukan regresi satu variabel (harga saham).
 
 **Parameter Model**
-- Optimizer: adam — algoritma optimasi yang efisien dan adaptif untuk training neural network.
-- Loss Function: mean_squared_error — digunakan untuk menghitung seberapa jauh hasil prediksi dari nilai sebenarnya.
-- Epoch: 100 — jumlah iterasi pelatihan model terhadap seluruh dataset.
-- Batch Size: 32 — jumlah sampel yang diproses sebelum model diperbarui.
+- Optimizer: **adam**, efisien dan adaptif untuk training neural network.
+- Loss Function: **mean_squared_error**, mengukur selisih kuadrat antara prediksi dan nilai aktual.
+- Metric: **mean_absolute_error**, menilai rata-rata kesalahan prediksi.
+- Epoch: **100**, jumlah iterasi pelatihan.
+- Batch Size: **32**, jumlah sampel dalam setiap batch pelatihan.
   
 **Visualisasi Hasil Training dan Validasi**
 ![alt text](img/image-1.png)
