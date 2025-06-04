@@ -128,6 +128,7 @@ Terdapat outlier pada kolom volume.
 ### Eksploratory Data Analysis (EDA)
 
 ### Statistik Deskriptif
+
 ![Logo](img/statistik.png)
 
 ### **Memeriksa korelasi antar fitur menggunakan heatmap**.
@@ -201,9 +202,11 @@ sns.boxplot(x=df['Volume'])
 ```
 
 Outlier sebelum diatasi
+
 ![before](img/before.png)
 
 Outlier setelah diatasi
+
 ![after](img/after.png)
 
 - **Memisahkan Fitur dan Target sebelum normalisasi data**
