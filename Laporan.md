@@ -148,9 +148,11 @@ Terdapat outlier pada kolom volume.
 ![Volume](img/volume.png)
 
 ## Data Preparation
+
 Pada bagian ini merupakan untuk menyiapkan data mentah menjadi data yang bersih, terstruktur, dan siap digunakan untuk analisis lanjutan hingga pemodelan machine learning. Proses ini sangat penting karena kualitas data sangat memengaruhi hasil akhir dari model atau analisis.
 
 ### Cleaning Data
+
 - **Mengubah tipe data kolom Date dan Volume, menjadikan Date sebagai index**
 ```sh
 # Mengubah kolom 'Date' ke format datetime (DD/MM/YYYY)
@@ -179,11 +181,14 @@ Date
 ```
 >
 > Kolom Date dan Volume sudah diubah mejadi type data yang sesuai.
+>
 > Kolom Date dijadikan sebagai index agar memudahkan analisis
+>
 > Karena data tidak memiliki missing value dan duplikasi, maka tidak perlu dilakukan penangan pada dua masalah tersebut.
 >
 
 - **Menangani outlier**
+
 Terdapat outlier pada kolom Volume. Sehingga menggunakan metode IQR untuk mengatasinya.
 
 ```sh
@@ -202,11 +207,17 @@ df.shape
 sns.boxplot(x=df['Volume'])
 ```
 > Cara metode IQR bekerja:
+> 
 > Menghitung Q1 (kuartil 1) dan Q3 (kuartil 3) dari data.
+> 
 > Menghitung IQR = Q3 - Q1.
+> 
 > Menentukan batas bawah dan atas:
+> 
 > Batas bawah = Q1 - 1.5 × IQR
+> 
 > Batas atas = Q3 + 1.5 × IQR
+> 
 > Nilai di luar batas ini dianggap outlier dan dihapus dari data.
 > 
 Outlier sebelum diatasi
@@ -226,7 +237,7 @@ y = df['Adj Close'].values.reshape(-1, 1)
 > Fitur (X): Berisi kolom-kolom prediktor yang akan digunakan oleh model.
 >
 > Target (Y): Merupakan kolom "Adj Close" (harga penutupan saham yang telah disesuaikan) yang akan diprediksi.
-Pemisahan ini dilakukan sebelum normalisasi, karena target tidak ikut dinormalisasi dalam proses pelatihan.
+> Pemisahan ini dilakukan sebelum normalisasi, karena target tidak ikut dinormalisasi dalam proses pelatihan.
 >
 
 - **Normalisasi Data:**
@@ -243,8 +254,11 @@ scaled_y = scaler_y.fit_transform(y)
 ```
 
 > **MinMaxScaler:** Digunakan untuk mengubah nilai fitur agar berada dalam rentang tertentu (default-nya 0 sampai 1).
+> 
 > **feature_range=(0, 1):** Menetapkan rentang skala output, yaitu dari 0 (minimum) sampai 1 (maksimum).
+> 
 > **fit**: Menghitung nilai minimum dan maksimum dari setiap fitur di X.
+> 
 > **transform:** Mengubah setiap nilai x menggunakan rumus normalisasi, 
 >
 > X_scaled = (X - X_min) / (X_max - X_min)
@@ -282,9 +296,13 @@ Kode reshape(X_train.shape[0], X_train.shape[1], 1) digunakan untuk mengubah dat
 [samples, time steps, features]
 ```
 > Notes:
+> 
 > samples = jumlah data (baris)
+> 
 > time steps = panjang urutan waktu
+> 
 > features = jumlah fitur per langkah waktu (biasanya 1 jika hanya satu variabel)
+> 
 > Reshape ini penting agar LSTM bisa membaca data time series dengan benar.
 > 
 
