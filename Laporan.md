@@ -185,6 +185,7 @@ Date
 
 - **Menangani outlier**
 Terdapat outlier pada kolom Volume. Sehingga menggunakan metode IQR untuk mengatasinya.
+
 ```sh
 #Menghitung Q1, Q3, dan IQR hanya untuk kolom Volume
 Q1 = df['Volume'].quantile(0.25)
@@ -200,7 +201,14 @@ df.shape
 # Memeriksa ulang outlier
 sns.boxplot(x=df['Volume'])
 ```
-
+> Cara metode IQR bekerja:
+> Menghitung Q1 (kuartil 1) dan Q3 (kuartil 3) dari data.
+> Menghitung IQR = Q3 - Q1.
+> Menentukan batas bawah dan atas:
+> Batas bawah = Q1 - 1.5 × IQR
+> Batas atas = Q3 + 1.5 × IQR
+> Nilai di luar batas ini dianggap outlier dan dihapus dari data.
+> 
 Outlier sebelum diatasi
 
 ![before](img/before.png)
@@ -226,17 +234,29 @@ Pemisahan ini dilakukan sebelum normalisasi, karena target tidak ikut dinormalis
 Menggunakan MinMaxScaler untuk menstandarkan nilai pada kolom Close, agar model LSTM dapat belajar secara stabil tanpa terpengaruh perbedaan skala antar fitur.
 ```sh
 #Standardisasi data
-scaler = MinMaxScaler(feature_range=(0, 1))
-scaled = scaler.fit_transform(X)
+scaler_X = MinMaxScaler(feature_range=(0, 1))
+scaled_x = scaler_X.fit_transform(X)
+
+# Untuk target (y) - satu kolom
+scaler_y = MinMaxScaler(feature_range=(0, 1))
+scaled_y = scaler_y.fit_transform(y)
 ```
+
+> **MinMaxScaler:** Digunakan untuk mengubah nilai fitur agar berada dalam rentang tertentu (default-nya 0 sampai 1).
+> **feature_range=(0, 1):** Menetapkan rentang skala output, yaitu dari 0 (minimum) sampai 1 (maksimum).
+> **fit**: Menghitung nilai minimum dan maksimum dari setiap fitur di X.
+> **transform:** Mengubah setiap nilai x menggunakan rumus normalisasi, 
+>
+> X_scaled = (X - X_min) / (X_max - X_min)
+>
 
 - **Spliting data:**
   
 Membagi data menjadi 80% untuk data latih dan 20% pada data uji berdasarkan urutan waktu (tanpa pengacakan), untuk mempertahankan sifat time series.
 Hasil pembagian data:
 ```sh
-Train Size: 918
-Test Size: 230
+Train Size: 881
+Test Size: 221
 ```
 
 - **Pembuatan Data Time Series:**
@@ -257,6 +277,16 @@ Model LSTM membutuhkan input dengan struktur tiga dimensi: (jumlah sampel, panja
 X_train = X_train.reshape(X_train.shape[0], X_train.shape[1], 1)
 X_test = X_test.reshape(X_test.shape[0], X_test.shape[1], 1)
 ```
+Kode reshape(X_train.shape[0], X_train.shape[1], 1) digunakan untuk mengubah data input menjadi bentuk 3 dimensi yang dibutuhkan oleh LSTM, yaitu:
+```sh
+[samples, time steps, features]
+```
+> Notes:
+> samples = jumlah data (baris)
+> time steps = panjang urutan waktu
+> features = jumlah fitur per langkah waktu (biasanya 1 jika hanya satu variabel)
+> Reshape ini penting agar LSTM bisa membaca data time series dengan benar.
+> 
 
 ## Modeling
 
@@ -310,31 +340,34 @@ Evaluasi performa model dilakukan menggunakan beberapa metrik regresi, yaitu **M
 
 |  Metrik    |	Nilai	    |  Interpretasi Singkat|
 | ---------- | ---------- | -------------------- |
-|  MSE	     | 5832.5618  |	Rata-rata kuadrat error; semakin kecil, semakin baik.|
-|  RMSE	     | 76.3712    |	Akar dari MSE; lebih mudah dipahami karena satuannya sama dengan data asli.|
-|  MAE	     | 55.8816    |	Rata-rata absolut selisih prediksi dan nilai aktual.|
-|  MAPE	     | 2.10%      |	Rata-rata persentase error; menunjukkan model cukup akurat. |
-|  R² Score  | 0.9685     |	Model menjelaskan 96.85% variasi data aktual; mendekati 1, berarti sangat baik. |
+|  MSE	     | 5412.8319  |	Rata-rata kuadrat error; semakin kecil, semakin baik.|
+|  RMSE	     | 73.5720    |	Akar dari MSE; lebih mudah dipahami karena satuannya sama dengan data asli.|
+|  MAE	     | 50.5505    |	Rata-rata absolut selisih prediksi dan nilai aktual.|
+|  MAPE	     | 1.92%      |	Rata-rata persentase error; menunjukkan model cukup akurat. |
+|  R² Score  | 0.9711     |	Model menjelaskan 96.85% variasi data aktual; mendekati 1, berarti sangat baik. |
 
-Dengan **R² = 0.9685**, model LSTM terbukti mampu memodelkan pola historis harga saham PT Telekomunikasi Indonesia dengan sangat baik. Nilai MAPE yang rendah (2.10%) juga mengindikasikan bahwa rata-rata kesalahan prediksi relatif kecil dibandingkan nilai aktualnya.
+Dengan **R² = 0.9711**, model LSTM terbukti mampu memodelkan pola historis harga saham PT Telekomunikasi Indonesia dengan sangat baik. Nilai MAPE yang rendah (2.10%) juga mengindikasikan bahwa rata-rata kesalahan prediksi relatif kecil dibandingkan nilai aktualnya.
 
 ## Kesimpulan
 
 Berdasarkan proyek prediksi harga saham PT Telkom Indonesia (TLKM) menggunakan model Long Short-Term Memory (LSTM), diperoleh beberapa kesimpulan penting:
+
 1. **Analisis Pergerakan Harga Saham TLKM (2019–2024)**
 ![Alt](img/trend.png)
 
 Dari hasil visualisasi data historis, terlihat bahwa harga saham TLKM mengalami fluktuasi yang signifikan selama periode 2019 hingga 2024. Terdapat tren penurunan pada awal periode pandemi, disusul dengan tren kenaikan harga yang cukup stabil hingga pertengahan 2022. Tren ini menunjukkan bahwa pergerakan harga saham sangat dipengaruhi oleh kondisi makroekonomi dan sentimen pasar.
 
 2. **Korelasi antara Harga Saham dan Volume Perdagangan**
+
 Analisis korelasi antara volume perdagangan dengan harga saham (Open, High, Low, Close) menunjukkan nilai korelasi yang kecil dan negatif. Hal ini mengindikasikan bahwa volume perdagangan tidak memiliki hubungan yang kuat terhadap pergerakan harga saham TLKM. Dengan kata lain, tingginya volume transaksi tidak serta merta memengaruhi naik-turunnya harga saham, sehingga investor perlu mempertimbangkan faktor lain dalam pengambilan keputusan investasi.
 
-3. **Prediksi Harga Saham Menggunakan LSTM**
+4. **Prediksi Harga Saham Menggunakan LSTM**
 ![Alt](img/predict%20-%20actual.png)
 
 Model LSTM berhasil mempelajari pola historis harga saham TLKM dan menunjukkan performa prediksi yang sangat baik. Hal ini terlihat dari grafik perbandingan antara harga aktual dan hasil prediksi, di mana garis prediksi mengikuti dengan akurat tren harga aktual. Hasil ini memperkuat keandalan LSTM dalam menangani data time series dan memberikan nilai prediktif yang tinggi, sehingga dapat menjadi alat bantu yang efektif bagi investor dalam mengambil keputusan transaksi.
 
 ## Referensi
+
 [^1]: Hendra T et al., "Prediksi Harga Saham Telkom Menggunakan Prophet: AnalisisPengaruh Sentimen Publik Terhadap Kehadiran Starlink," Malcom Jurnal, 2025. [Link](https://journal.irpi.or.id/index.php/malcom/article/view/1796/927)
 
 [^2]: Meydina Rhma, "Implementasi Algoritma Long Short Term Memory(LSTM) untuk Prediksi Penutupan Harga Saham PT Telkom Indonesia," Medium.com, 2021. [Link](https://meydina-rhma.medium.com/implementasi-algoritma-long-short-term-memory-lstm-untuk-prediksi-penutupan-harga-saham-pt-telkom-1d3997ddb81c)
