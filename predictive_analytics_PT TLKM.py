@@ -37,7 +37,7 @@ Dataset ini terdiri dari 7 kolom diantaranya:
 - **Date**    : Tanggal pencatatan data dalam format DD/MM/YYYY.
 - **Adj Close**: Harga penutupan yang telah disesuaikan untuk memberikan nilai lebih akurat, termasuk dividen dan pembagian saham.
 - **Close**    : Harga penutupan pada akhir hari perdagangan.
-- **High **    : Harga tertinggi yang dicapai saham pada hari perdagangan tersebut.
+- **High**    : Harga tertinggi yang dicapai saham pada hari perdagangan tersebut.
 - **Low**      : Harga terendah yang dicapai saham pada hari perdagangan tersebut.
 - **Open**     : Harga pembukaan saham di awal hari perdagangan.
 - **Volume**   : Jumlah volume saham yang diperdagangkan pada hari tersebut (dalam format angka bertitik, perlu diubah ke format numerik untuk analisis).
@@ -46,10 +46,7 @@ Dataset ini terdiri dari 7 kolom diantaranya:
 df = pd.read_csv('/content/SAHAM - PT Telekomunikasi Indonesia Tbk (TLKM.JK) - Sheet1.csv')
 df.head()
 
-"""#Exploratory Data Analysis
-
-##Deskripsi Variabel
-"""
+"""##Data Understanding"""
 
 df.info()
 
@@ -72,29 +69,58 @@ df['Volume'] = df['Volume'].str.replace('.', '', regex=False).astype(float)
 print(df.dtypes)
 print(df.head())
 
-#Statistik deskriiptif setelah mengubah tipe data
+#Statistik deskriptif setelah mengubah tipe data
 df.describe()
 
 """##Menangani Missing Value dan Outliers"""
 
-df.isnull().sum()
+data = df.isnull().sum()
+print("Jumlah missing value pada setiap kolom:")
+print(data)
 
-df.duplicated()
+data = df.duplicated().sum()
+print("Jumlah data duplikat:")
+print(data)
 
-sns.boxplot(x=df['Adj Close'])
+# Hanya ambil kolom numerik
+num_cols = df.select_dtypes(include=['float64', 'int64']).columns
 
-sns.boxplot(x=df['Close'])
+outlier_counts = {}
 
-sns.boxplot(x=df['High'])
+for col in num_cols:
+    Q1 = df[col].quantile(0.25)
+    Q3 = df[col].quantile(0.75)
+    IQR = Q3 - Q1
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+    outliers = df[(df[col] < lower_bound) | (df[col] > upper_bound)]
+    outlier_counts[col] = outliers.shape[0]
 
-sns.boxplot(x=df['Low'])
-
-sns.boxplot(x=df['Volume'])
+# Tampilkan jumlah outlier tiap kolom
+outlier_df = pd.DataFrame.from_dict(outlier_counts, orient='index', columns=['Jumlah Outlier'])
+print(outlier_df)
 
 """Note: Terdapat outlier pada kolom volume.
 
 metode IQR digunakan untuk mengatasi outlier
 """
+
+# Membuat plot boxplot untuk setiap kolom numerik
+fig, axes = plt.subplots(2, 3, figsize=(10, 8))
+axes = axes.flatten()
+
+for i, col in enumerate(num_cols):
+    sns.boxplot(x=df[col], ax=axes[i])
+    axes[i].set_title(f'Outlier {col}')
+    axes[i].set_xlabel('') # Kosongkan label x untuk kebersihan
+
+# Menyembunyikan subplot yang tidak digunakan jika jumlah kolom ganjil
+if len(num_cols) < len(axes):
+    for j in range(len(num_cols), len(axes)):
+        fig.delaxes(axes[j])
+
+plt.tight_layout()
+plt.show()
 
 #Menghitung Q1, Q3, dan IQR hanya untuk kolom Volume
 Q1 = df['Volume'].quantile(0.25)
@@ -109,6 +135,21 @@ df = df[filter_outliers]
 df.shape
 
 sns.boxplot(x=df['Volume'])
+
+for col in num_cols:
+    Q1 = df[col].quantile(0.25)
+    Q3 = df[col].quantile(0.75)
+    IQR = Q3 - Q1
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+    outliers = df[(df[col] < lower_bound) | (df[col] > upper_bound)]
+    outlier_counts[col] = outliers.shape[0]
+
+# Tampilkan jumlah outlier tiap kolom
+outlier_df = pd.DataFrame.from_dict(outlier_counts, orient='index', columns=['Jumlah Outlier'])
+print(outlier_df)
+
+"""### Eksploratory Data Analysis (EDA)"""
 
 #Memeriksa jumlah nilai unique pada tiap kolom
 print("\n=== UNIQUE VALUES PER COLUMN ===")
@@ -201,13 +242,20 @@ X = df.drop(columns=['Adj Close'])
 y = df['Adj Close'].values.reshape(-1, 1)  # Ubah ke array 2D agar bisa di-scale
 
 #Standardisasi data
-scaler = MinMaxScaler(feature_range=(0, 1))
-scaled = scaler.fit_transform(X)
+# scaler = MinMaxScaler(feature_range=(0, 1))
+# scaled = scaler.fit_transform(X)
+
+# Untuk fitur (X) - multi kolom
+scaler_X = MinMaxScaler()
+scaled_x = scaler_X.fit_transform(X)
+
+# Untuk target (y) - satu kolom
+scaler_y = MinMaxScaler()
+scaled_y = scaler_y.fit_transform(y.reshape(-1, 1))
 
 # Split data menjadi train dan test dengan 80% untuk data train dan 20% data test
-train_size = int(len(scaled) * 0.8)
-test_size = len(scaled) - train_size
-train, test = scaled[0:train_size,:], scaled[train_size:len(scaled),:]
+train_size = int(len(scaled_x) * 0.8)
+train, test = scaled_x[0:train_size,:], scaled_x[train_size:len(scaled_x),:]
 
 print(f"Train Size: {len(train)}")
 print(f"Test Size: {len(test)}")
@@ -266,11 +314,6 @@ history = model.fit(
     verbose=1
 )
 
-"""Note:
-
-Dengan menggunakan EarlyStopping, pelatihan akan otomatis dihentikan jika nilai validation loss tidak membaik. Setelah pelatihan berhenti, model akan otomatis mengembalikan bobot terbaik (dengan val_loss terendah), bukan yang terakhir.
-"""
-
 #Visualisasi hasil training dan validasi
 plt.figure(figsize=(12, 6))
 plt.plot(history.history['loss'], label='Training Loss')
@@ -291,8 +334,6 @@ Dari grafik dapat disimpulkan bahwa tidak ada indikasi kuat terjadinya overfitti
 """
 
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-import matplotlib.pyplot as plt
-import numpy as np
 
 # Prediksi & inverse transform
 predictions = model.predict(X_test)
@@ -313,7 +354,7 @@ print(f"Test MAE: {mae:.4f}")
 print(f"Test MAPE: {mape:.2f}%")
 print(f"R² Score: {r2:.4f}")
 
-"""Note: Score R² mencapai 96% dan MAPE sangat rendah menunjukan bahwa model LSTM sudah baik"""
+"""Note: Score R² mencapai 97% dan MAPE sangat rendah menunjukan bahwa model LSTM sudah baik"""
 
 # Visualisasi hasil prediksi
 plt.figure(figsize=(12,6))
@@ -332,15 +373,15 @@ Hasil Evaluasi Model:
 
 Model yang dibangun menunjukkan performa prediksi yang sangat baik, dengan akurasi tinggi dan nilai prediksi yang sangat dekat dengan nilai aktual. Hal ini ditunjukkan oleh hasil evaluasi berikut:
 
-- Mean Squared Error (MSE): 5832.5618
-- Root Mean Squared Error (RMSE): 76.3712
-- Mean Absolute Error (MAE): 55.8816
-- Mean Absolute Percentage Error (MAPE): 2.10%
-- R² Score: 0.9685
+- Mean Squared Error (MSE): 4971.9093
+- Root Mean Squared Error (RMSE): 70.5118
+- Mean Absolute Error (MAE): 49.3889
+- Mean Absolute Percentage Error (MAPE): 1.86%
+- R² Score: 0.9731
 
-Nilai R² sebesar 0.9685 mengindikasikan bahwa model mampu menjelaskan sekitar 96.85% variasi pada data target. Sementara itu, nilai MAPE yang rendah (2.10%) menunjukkan kesalahan prediksi relatif yang sangat kecil terhadap nilai aktual.
+Nilai R² sebesar 0.9731 mengindikasikan bahwa model mampu menjelaskan sekitar 97% variasi pada data target. Sementara itu, nilai MAPE yang rendah (1.86%) menunjukkan kesalahan prediksi relatif yang sangat kecil terhadap nilai aktual.
 
-Dengan kombinasi error yang rendah dan R² yang tinggi, serta perbandingan performa training dan testing yang konsisten (diasumsikan tidak overfit), dapat disimpulkan bahwa model tidak mengalami overfitting dan memiliki generalisasi yang baik terhadap data baru.
+Dengan kombinasi error yang rendah dan R² yang tinggi, serta perbandingan performa training dan testing yang konsisten, dapat disimpulkan bahwa model tidak mengalami overfitting dan memiliki generalisasi yang baik terhadap data baru.
 
 
 
