@@ -245,17 +245,15 @@ y = df['Adj Close'].values.reshape(-1, 1)
 Menggunakan MinMaxScaler untuk menstandarkan nilai pada kolom Close, agar model LSTM dapat belajar secara stabil tanpa terpengaruh perbedaan skala antar fitur.
 ```sh
 #Standardisasi data
-scaler_X = MinMaxScaler(feature_range=(0, 1))
+scaler_X = MinMaxScaler()
 scaled_x = scaler_X.fit_transform(X)
 
 # Untuk target (y) - satu kolom
-scaler_y = MinMaxScaler(feature_range=(0, 1))
+scaler_y = MinMaxScaler()
 scaled_y = scaler_y.fit_transform(y)
 ```
 
 > **MinMaxScaler:** Digunakan untuk mengubah nilai fitur agar berada dalam rentang tertentu (default-nya 0 sampai 1).
-> 
-> **feature_range=(0, 1):** Menetapkan rentang skala output, yaitu dari 0 (minimum) sampai 1 (maksimum).
 > 
 > **fit**: Menghitung nilai minimum dan maksimum dari setiap fitur di X.
 > 
@@ -269,8 +267,8 @@ scaled_y = scaler_y.fit_transform(y)
 Membagi data menjadi 80% untuk data latih dan 20% pada data uji berdasarkan urutan waktu (tanpa pengacakan), untuk mempertahankan sifat time series.
 Hasil pembagian data:
 ```sh
-Train Size: 881
-Test Size: 221
+Train Size: 918
+Test Size: 230
 ```
 
 - **Pembuatan Data Time Series:**
@@ -358,13 +356,13 @@ Evaluasi performa model dilakukan menggunakan beberapa metrik regresi, yaitu **M
 
 |  Metrik    |	Nilai	    |  Interpretasi Singkat|
 | ---------- | ---------- | -------------------- |
-|  MSE	     | 5412.8319  |	Rata-rata kuadrat error; semakin kecil, semakin baik.|
-|  RMSE	     | 73.5720    |	Akar dari MSE; lebih mudah dipahami karena satuannya sama dengan data asli.|
-|  MAE	     | 50.5505    |	Rata-rata absolut selisih prediksi dan nilai aktual.|
-|  MAPE	     | 1.92%      |	Rata-rata persentase error; menunjukkan model cukup akurat. |
-|  R² Score  | 0.9711     |	Model menjelaskan 96.85% variasi data aktual; mendekati 1, berarti sangat baik. |
+|  MSE	     | 4971.9093  |	Rata-rata kuadrat error; semakin kecil, semakin baik.|
+|  RMSE	     | 70.5118    |	Akar dari MSE; lebih mudah dipahami karena satuannya sama dengan data asli.|
+|  MAE	     | 49.3889    |	Rata-rata absolut selisih prediksi dan nilai aktual.|
+|  MAPE	     | 1.86%      |	Rata-rata persentase error; menunjukkan model cukup akurat. |
+|  R² Score  | 0.9731     |	Model menjelaskan 97.31% variasi data aktual; mendekati 1, berarti sangat baik. |
 
-Dengan **R² = 0.9711**, model LSTM terbukti mampu memodelkan pola historis harga saham PT Telekomunikasi Indonesia dengan sangat baik. Nilai MAPE yang rendah (2.10%) juga mengindikasikan bahwa rata-rata kesalahan prediksi relatif kecil dibandingkan nilai aktualnya.
+Dengan **R² = 0.9731**, model LSTM terbukti mampu memodelkan pola historis harga saham PT Telekomunikasi Indonesia dengan sangat baik. Nilai MAPE yang rendah (1.86%) juga mengindikasikan bahwa rata-rata kesalahan prediksi relatif kecil dibandingkan nilai aktualnya.
 
 ## Kesimpulan
 
@@ -379,7 +377,7 @@ Dari hasil visualisasi data historis, terlihat bahwa harga saham TLKM mengalami 
 
 Analisis korelasi antara volume perdagangan dengan harga saham (Open, High, Low, Close) menunjukkan nilai korelasi yang kecil dan negatif. Hal ini mengindikasikan bahwa volume perdagangan tidak memiliki hubungan yang kuat terhadap pergerakan harga saham TLKM. Dengan kata lain, tingginya volume transaksi tidak serta merta memengaruhi naik-turunnya harga saham, sehingga investor perlu mempertimbangkan faktor lain dalam pengambilan keputusan investasi.
 
-4. **Prediksi Harga Saham Menggunakan LSTM**
+3. **Prediksi Harga Saham Menggunakan LSTM**
 ![Alt](img/predict%20-%20actual.png)
 
 Model LSTM berhasil mempelajari pola historis harga saham TLKM dan menunjukkan performa prediksi yang sangat baik. Hal ini terlihat dari grafik perbandingan antara harga aktual dan hasil prediksi, di mana garis prediksi mengikuti dengan akurat tren harga aktual. Hasil ini memperkuat keandalan LSTM dalam menangani data time series dan memberikan nilai prediktif yang tinggi, sehingga dapat menjadi alat bantu yang efektif bagi investor dalam mengambil keputusan transaksi.
