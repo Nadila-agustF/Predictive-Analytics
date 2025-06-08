@@ -147,6 +147,12 @@ Terdapat outlier pada kolom volume.
 ### Melihat distribusi volume dalam 30 hari terakhir
 ![Volume](img/volume.png)
 
+> Berdasarkan distribusi volume saham selama 30 hari terakhir, data menunjukkan pola distribusi yang miring ke kanan (right-skewed) dengan beberapa nilai outlier di sisi kanan grafik.
+> Outlier ini merepresentasikan volume perdagangan yang sangat tinggi, bahkan melebihi 2.0 × 10⁸ unit.
+> Nilai-nilai tersebut diduga merupakan aktivitas pasar yang sah, seperti pengumuman penting atau aksi korporasi, sehingga dianggap relevan dan penting untuk dipertahankan dalam proses pelatihan model. Dengan begitu, model diharapkan mampu mengenali pola lonjakan volume yang signifikan.
+> Namun, jika performa model terpengaruh secara negatif, akan dipertimbangkan penerapan transformasi atau pendekatan yang lebih robust.
+>
+
 ## Data Preparation
 
 Pada bagian ini merupakan untuk menyiapkan data mentah menjadi data yang bersih, terstruktur, dan siap digunakan untuk analisis lanjutan hingga pemodelan machine learning. Proses ini sangat penting karena kualitas data sangat memengaruhi hasil akhir dari model atau analisis.
